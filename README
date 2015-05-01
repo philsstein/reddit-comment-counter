@@ -1,0 +1,87 @@
+These scripts keep track of comments to a subreddit. The first script, comment-counter-d.py, 
+creates and writes comment information to a local database. The database is named by default
+the name of the subreddit, e.g. boardgames.db. This script needs to run as a daemon, always on.
+The second script, comment-count.py, queries the database and spits out username and comment
+count for the given period in the past. e.g. "show the top 10 commenters in the last 2 hours."
+Output is username and number of posts for the period requested.
+
+-------------------------
+
+usage: comment-counter-d.py [-h] [-s SUBREDDIT]                                                              
+                         [-l {none,all,debug,info,warning,error,critical}]                                
+                                                                                                          
+optional arguments:                                                                                       
+  -h, --help            show this help message and exit                                                   
+  -s SUBREDDIT, --subreddit SUBREDDIT                                                                     
+                        The subreddit to read.                                                            
+  -l {none,all,debug,info,warning,error,critical}, --loglevel {none,all,debug,info,warning,error,critical}
+                        The level at which to log. Must be one of none, debug,                            
+                        info, warning, error, or critical. Default is none.                               
+                        (This is mostly used for debugging.)                                              
+
+-------------------------
+
+usage: comment-count.py [-h] [-d DATABASE]                                                                   
+                     [-u {second,minute,hour,day,week,month,year}] [-v VALUE]                             
+                     [-c COUNT]                                                                           
+                     [-l {none,all,debug,info,warning,error,critical}]                                    
+                                                                                                          
+optional arguments:                                                                                       
+  -h, --help            show this help message and exit                                                   
+  -d DATABASE, --database DATABASE                                                                        
+                        The database to read.                                                             
+  -u {second,minute,hour,day,week,month,year}, --unit {second,minute,hour,day,week,month,year}            
+                        List post count by time ago given.                                                
+  -v VALUE, --value VALUE                                                                                 
+                        How many of the unit to have. i.e. -v 1 -u 'day' is                               
+                        one day ago.                                                                      
+  -c COUNT, --count COUNT                                                                                 
+                        Number of results to return.                                                      
+  -l {none,all,debug,info,warning,error,critical}, --loglevel {none,all,debug,info,warning,error,critical}
+                        The level at which to log. Must be one of none, debug,                            
+                        info, warning, error, or critical. Default is none.                               
+                        (This is mostly used for debugging.)                                              
+
+-------------------------
+
+Example:
+
+Start the daemon in one console (use tmux or screen for persistant sessions):
+ 
+> python comment-counter-d.py -s boardgames 2>&1 | tee counter.log
+
+Wait for the database to populate for a while, then you can issue queries.
+
+Show the top 10 posters in the last 3 days:
+
+> python comment-count.py -d boardgames.db -u day -v 3 -c 10
+
+Show the top 25 posters in the last month:
+
+> python comment-count.py -d boardgames.db -u month -v 1 -c 25
+
+Supported units are second,minute,hour,day,week,month,year. Do not specify a count if
+you want all commenters listed.
+
+Show all commenters in the last ten minutes:
+
+
+> python comment-count.py -d boardgames.db -u minute -v 5
+Found 18 comments from the last 5 minutes.
+   2 - timotab                            
+   2 - CheetahSnake                       
+   1 - masterdebator88                    
+   1 - pm1902                             
+   1 - citadel712                         
+   1 - max7272sp                          
+   1 - Chron_X                            
+   1 - slow56k                            
+   1 - Blamsquad                          
+   1 - mdroke                             
+   1 - inertiadriftsc                     
+   1 - Darlsgudat0                        
+   1 - manyshaped                         
+   1 - makejelone                         
+   1 - kawarazu                           
+   1 - illwunn                            
+
