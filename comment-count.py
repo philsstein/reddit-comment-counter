@@ -39,5 +39,5 @@ if __name__ == '__main__':
     rank = 1
     print('Rank Count Username')
     for user, count in c.most_common(result_count):
-        print('{:3}. {:5} {}'.format(rank, count, user))
+        print('{:3}. {:5} {}'.format(rank, str(count).center(5), user))
         rank = rank + 1
