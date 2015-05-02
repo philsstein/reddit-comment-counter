@@ -22,11 +22,13 @@ if __name__ == '__main__':
     db = sqlite3.connect(args.database)
 
     # select count(*) from comments where datetime(timestamp, 'unixepoch') > datetime('now', '-1 hour');
+    then = db.execute("SELECT datetime('now', '-{} {}')".format(args.value, args.unit)).fetchone()[0]
     rows = db.execute("SELECT * FROM comments WHERE datetime(timestamp, 'unixepoch') > "
                       "datetime('now', '-{} {}')".format(args.value, args.unit)).fetchall()
 
     ess = 's' if args.value > 1 else ''
-    print('Found {} comments from the last {} {}{}.'.format(len(rows), args.value, args.unit, ess))
+    print('Found {} comments from the last {} {}{}. Comments newer than {}'.format(
+        len(rows), args.value, args.unit, ess, then))
 
     # there is probably an SQL way to do this much much better.
     c = Counter()
@@ -34,5 +36,8 @@ if __name__ == '__main__':
         c[row[1]] += 1
 
     result_count = len(rows) if not args.count else args.count
+    rank = 1
+    print('Rank Count Username')
     for user, count in c.most_common(result_count):
-        print('{:4} - {}'.format(count, user))
+        print('{:3}. {:5} {}'.format(rank, count, user))
+        rank = rank + 1
