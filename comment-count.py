@@ -23,12 +23,14 @@ if __name__ == '__main__':
 
     # select count(*) from comments where datetime(timestamp, 'unixepoch') > datetime('now', '-1 hour');
     then = db.execute("SELECT datetime('now', '-{} {}')".format(args.value, args.unit)).fetchone()[0]
-    rows = db.execute("SELECT * FROM comments WHERE datetime(timestamp, 'unixepoch') > "
-                      "datetime('now', '-{} {}')".format(args.value, args.unit)).fetchall()
+    rows = db.execute("SELECT cid,username,datetime(timestamp, 'unixepoch') FROM comments WHERE "
+                      "datetime(timestamp, 'unixepoch') > datetime('now', '-{} {}')".format(
+                          args.value, args.unit)).fetchall()
 
     ess = 's' if args.value > 1 else ''
     print('Found {} comments from the last {} {}{}. Comments newer than {}'.format(
         len(rows), args.value, args.unit, ess, then))
+    print('Oldest comment: {}'.format(rows[0][2]))
 
     # there is probably an SQL way to do this much much better.
     c = Counter()
