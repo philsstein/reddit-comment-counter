@@ -39,7 +39,7 @@ if __name__ == '__main__':
 
     result_count = len(rows) if not args.count else args.count
     rank = 1
-    print('Rank Count Username')
+    print('    Rank Count Username')
     for user, count in c.most_common(result_count):
-        print('{:3}. {:5} {}'.format(rank, str(count).center(5), user))
+        print('    {:3}. {:5} {}'.format(rank, str(count).center(5), user))
         rank = rank + 1
