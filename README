@@ -1,9 +1,4 @@
-These scripts keep track of comments to a subreddit. The first script, comment-counter-d.py, 
-creates and writes comment information to a local database. The database is named by default
-the name of the subreddit, e.g. boardgames.db. This script needs to run as a daemon, always on.
-The second script, comment-count.py, queries the database and spits out username and comment
-count for the given period in the past. e.g. "show the top 10 commenters in the last 2 hours."
-Output is username and number of posts for the period requested.
+These scripts keep track of comments to a subreddit. The first script, comment-counter-d.py, creates and writes comment information to a local database. The database is named by default the name of the subreddit, e.g. boardgames.db. This script needs to run as a daemon, always on.  The second script, comment-count.py, queries the database and spits out username and comment count for the given period in the past. e.g. "show the top 10 commenters in the last 2 hours." Output is username and number of posts for the period requested.
 
 -------------------------
 
@@ -60,10 +55,9 @@ Show the top 25 posters in the last month:
 
 > python comment-count.py -d boardgames.db -u month -v 1 -c 25
 
-Supported units are second,minute,hour,day,week,month,year. Do not specify a count if
-you want all commenters listed.
+Supported units are second,minute,hour,day,week,month,year. Do not specify a count if you want all commenters listed.
 
-Show all commenters in the last ten minutes:
+Show all commenters in the last five minutes:
 
 
 > python comment-count.py -d boardgames.db -u minute -v 5
